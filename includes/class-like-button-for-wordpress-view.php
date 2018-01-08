@@ -59,7 +59,7 @@ class Like_Button_For_Wordpress_View
     public function like_button_for_wordpress_view()
     {
         if (is_single()) {
-            require_once plugin_dir_path(__FILE__) . '../partial/like-button-for-wordpress-view.php';
+            require_once plugin_dir_path(__FILE__) . '../components/like-button-for-wordpress-view.php';
         }
         return;
     }

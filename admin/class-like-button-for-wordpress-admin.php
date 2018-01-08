@@ -98,7 +98,7 @@ class Like_Button_For_Wordpress_Admin
      */
     public function render_meta_box()
     {
-        require_once plugin_dir_path(__FILE__) . '../partial/like-button-for-wordpress.php';
+        require_once plugin_dir_path(__FILE__) . '../components/like-button-for-wordpress.php';
     }
 
     /**
@@ -106,6 +106,6 @@ class Like_Button_For_Wordpress_Admin
      */
     public function render_like_button()
     {
-        require_once plugin_dir_path(__FILE__) . '../partial/like-button-admin-page.php';
+        require_once plugin_dir_path(__FILE__) . '../components/like-button-admin-page.php';
     }
 }
