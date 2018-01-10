@@ -41,6 +41,8 @@ class Like_Button_For_Wordpress_Model
 
     /**
      * Enqueues Javascript into WP. Responsible for styling the contents of the plugin on the site.
+     * Enqueues the stylesheet into WP. Responsible for styling the contents of the plugin on the site.
+     * Enqueue scripts relating to the admin area of wp can be found in the /admin section of the plugin.
      */
     public function enqueue_scripts()
     {
@@ -51,13 +53,7 @@ class Like_Button_For_Wordpress_Model
               $this->version,
               false
           );
-    }
 
-    /**
-     * Enqueues the stylesheet into WP. Responsible for styling the contents of the plugin on the site.
-     */
-    public function enqueue_styles()
-    {
         wp_enqueue_style(
               'like-button-for-wordpress',
               plugin_dir_url(__FILE__) . '../assets/css/like-button-for-wordpress.css',
@@ -66,6 +62,7 @@ class Like_Button_For_Wordpress_Model
               false
           );
     }
+
 
     /**
      * Loads the Like Button on any WP single page.
