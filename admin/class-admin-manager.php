@@ -41,33 +41,17 @@ class Like_Button_For_Wordpress_Admin
     }
 
     /**
-     * Enqueues the stylesheet responsible for styling the contents of this
-     * meta box.
+     * Enqueues the stylesheet responsible for styling the contents of the plugin on the site.
+     * The plugin uses minimal styling to allow developers and designers maximum control over design.
      */
     public function enqueue_styles()
     {
         wp_enqueue_style(
-              'like-button-for-wordpress-admin',
+              'like-button-for-wordpress',
               plugin_dir_url(__FILE__) . 'css/like-button-for-wordpress-admin.css',
               array(),
               $this->version,
               false
-          );
-    }
-
-    /**
-     * Registers the meta box that will be used to display all of the post meta data
-     * associated with the current post.
-     */
-    public function add_meta_box()
-    {
-        add_meta_box(
-              'like-button-for-wordpress-admin',
-              'Like Button For Wordpress',
-              [$this, 'render_meta_box' ],
-              'post',
-              'normal',
-              'core'
           );
     }
 
@@ -88,24 +72,16 @@ class Like_Button_For_Wordpress_Admin
               'Like Button For WP',
               'administrator',
               'like-button-for-wordpress-admin-page',
-              [$this, 'render_like_button'],
+              [$this, 'render_like_button_admin_page'],
               '10'
           );
     }
 
     /**
-     * Requires the file that is used to display the user interface of the post meta box.
-     */
-    public function render_meta_box()
-    {
-        require_once plugin_dir_path(__FILE__) . '../components/like-button-for-wordpress.php';
-    }
-
-    /**
      * Requires the file that is used to display the admin interface page.
      */
-    public function render_like_button()
+    public function render_like_button_admin_page()
     {
-        require_once plugin_dir_path(__FILE__) . '../components/like-button-admin-page.php';
+        require_once plugin_dir_path(__FILE__) . 'view-admin-settings-page.php';
     }
 }

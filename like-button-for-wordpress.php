@@ -49,7 +49,7 @@ if (! defined('ABSPATH')) {
 /**
  * Include the core class responsible for loading all necessary components of the plugin.
  */
-require_once plugin_dir_path(__FILE__) . 'includes/class-like-button-for-wordpress-manager.php';
+require_once plugin_dir_path(__FILE__) . 'includes/class-manager.php';
 
 /**
  * Instantiates the run Like Button For Wordpress class and then
