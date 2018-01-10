@@ -47,7 +47,7 @@ class Like_Button_For_Wordpress_Admin
     public function enqueue_styles()
     {
         wp_enqueue_style(
-              'like-button-for-wordpress',
+              'like-button-for-wordpress-admin',
               plugin_dir_url(__FILE__) . 'css/like-button-for-wordpress-admin.css',
               array(),
               $this->version,

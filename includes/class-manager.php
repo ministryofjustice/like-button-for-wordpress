@@ -67,7 +67,7 @@ class Like_Button_For_Wordpress_Manager
     public function __construct()
     {
         $this->plugin_slug = 'like-button-for-wordpress';
-        $this->version = '0.2.0';
+        $this->version = '0.2.1';
 
         $this->load_dependencies();
         $this->define_admin_hooks();
@@ -90,7 +90,7 @@ class Like_Button_For_Wordpress_Manager
         require_once plugin_dir_path(dirname(__FILE__)) . 'admin/class-admin-manager.php';
         require_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-model.php';
         require_once plugin_dir_path(__FILE__) . 'class-loader.php';
-        
+
         $this->loader = new Like_Button_For_Wordpress_Loader();
     }
 
@@ -110,6 +110,9 @@ class Like_Button_For_Wordpress_Manager
 
         $this->loader->add_action('admin_enqueue_scripts', $admin, 'enqueue_styles');
         $this->loader->add_action('admin_menu', $admin, 'like_button_for_wordpress_menu');
+
+        $this->loader->add_action('wp_enqueue_scripts', $model, 'enqueue_styles');
+        $this->loader->add_action('wp_enqueue_scripts', $model, 'enqueue_scripts');
         $this->loader->add_filter('the_content', $model, 'like_button_for_wordpress_view', 10, 1);
     }
 
