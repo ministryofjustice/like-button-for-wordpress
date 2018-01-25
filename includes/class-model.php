@@ -51,7 +51,7 @@ class Like_Button_For_Wordpress_Model
               plugin_dir_url(__FILE__) . '../assets/js/like-button-for-wordpress.js',
               array(),
               $this->version,
-              false
+              true
           );
 
         wp_enqueue_style(
@@ -61,6 +61,29 @@ class Like_Button_For_Wordpress_Model
               $this->version,
               false
           );
+
+          // Passes WP/PHP data to the enqueued Javascript file
+          wp_localize_script('like-button-for-wordpress', 'LikeButtonData',
+              [
+                'currentPostID' => get_the_ID(),
+                'likeButtonCount'  => get_post_meta(get_the_ID(), 'lbfw_likes_count'),
+                'adminAjaxWP'  => admin_url('admin-ajax.php')
+
+              ]
+            );
+    }
+
+    public function like_button_ajax_update_db()
+    {
+        // Post values returning from AJAX request
+        $post_id = $_POST['postID'];
+        $like_count_value = $_POST['likeCountValue'];
+
+        $like_count_value = $like_count_value + 1;
+
+        update_post_meta($post_id, 'lbfw_likes_count', $like_count_value);
+
+        wp_die();
     }
 
 
@@ -70,8 +93,10 @@ class Like_Button_For_Wordpress_Model
     public function like_button_for_wordpress_view($content)
     {
         if (is_single()) {
+            echo '<div id="blog-post-103">';
             echo $content;
             require_once plugin_dir_path(__FILE__) . '../components/view-like-button.php';
+            echo '</div>';
         } else {
             return $content;
         }

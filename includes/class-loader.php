@@ -50,10 +50,12 @@ class Like_Button_For_Wordpress_Loader
      * @param  string    $hook        The name of the WordPress hook to which we're registering a callback.
      * @param  object    $component   The object that contains the method to be called when the hook is fired.
      * @param  string    $callback    The function that resides on the specified component.
+     * @param  int       $priority    Specifies the order in which the functions associated with a particular action is executed.
+     * @param  int       $args        The number of arguments the function accepts.
      */
-    public function add_action($hook, $component, $callback)
+    public function add_action($hook, $component, $callback, $priority = null, $args = null)
     {
-        $this->actions = $this->add($this->actions, $hook, $component, $callback);
+        $this->actions = $this->add($this->actions, $hook, $component, $callback, $priority, $args);
     }
 
     /**
@@ -63,10 +65,12 @@ class Like_Button_For_Wordpress_Loader
      * @param  string    $hook        The name of the WordPress hook to which we're registering a callback.
      * @param  object    $component   The object that contains the method to be called when the hook is fired.
      * @param  string    $callback    The function that resides on the specified component.
+     * @param  int       $priority    Specifies the order in which the functions associated with a particular filter are executed.
+     * @param  int       $args        The number of arguments the function accepts.
      */
-    public function add_filter($hook, $component, $callback)
+    public function add_filter($hook, $component, $callback, $priority = null, $args = null)
     {
-        $this->filters = $this->add($this->filters, $hook, $component, $callback);
+        $this->filters = $this->add($this->filters, $hook, $component, $callback, $priority, $args);
     }
 
     /**
@@ -79,15 +83,19 @@ class Like_Button_For_Wordpress_Loader
      * @param  string    $hook        The name of the WordPress hook to which we're registering a callback.
      * @param  object    $component   The object that contains the method to be called when the hook is fired.
      * @param  string    $callback    The function that resides on the specified component.
+     * @param  int       $priority    Order a associated particular filter/action is executed.
+     * @param  int       $args        The number of arguments the function accepts.
      *
      * @return array                  The collection of hooks that are registered with WordPress via this class.
      */
-    private function add($hooks, $hook, $component, $callback)
+    private function add($hooks, $hook, $component, $callback, $priority = null, $args = null)
     {
         $hooks[] = [
             'hook'      => $hook,
             'component' => $component,
-            'callback'  => $callback
+            'callback'  => $callback,
+            'priority'    => $priority,
+            'args'      => $args,
         ];
 
         return $hooks;
@@ -99,11 +107,11 @@ class Like_Button_For_Wordpress_Loader
     public function run()
     {
         foreach ($this->filters as $hook) {
-            add_filter($hook['hook'], array( $hook['component'], $hook['callback'] ));
+            add_filter($hook['hook'], array( $hook['component'], $hook['callback']), $hook['priority'], $hook['args']);
         }
 
         foreach ($this->actions as $hook) {
-            add_action($hook['hook'], array( $hook['component'], $hook['callback'] ));
+            add_action($hook['hook'], array( $hook['component'], $hook['callback']), $hook['priority'], $hook['args']);
         }
     }
 }

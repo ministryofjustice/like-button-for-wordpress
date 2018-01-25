@@ -108,11 +108,16 @@ class Like_Button_For_Wordpress_Manager
         $admin = new Like_Button_For_Wordpress_Admin($this->get_version());
         $model = new Like_Button_For_Wordpress_Model($this->get_version());
 
+        // Adds backend admin WP hooks
         $this->loader->add_action('admin_enqueue_scripts', $admin, 'enqueue_styles');
         $this->loader->add_action('admin_menu', $admin, 'like_button_for_wordpress_menu');
 
+        // Adds frontend WP hooks
+        $this->loader->add_filter('the_content', $model, 'like_button_for_wordpress_view', 15,1);
         $this->loader->add_action('wp_enqueue_scripts', $model, 'enqueue_scripts');
-        $this->loader->add_filter('the_content', $model, 'like_button_for_wordpress_view', 10, 1);
+        $this->loader->add_action( 'wp_ajax_nopriv_like_button_ajax_action', $model, 'like_button_ajax_update_db' );
+        $this->loader->add_action( 'wp_ajax_like_button_ajax_action', $model, 'like_button_ajax_update_db' );
+
     }
 
     /**
