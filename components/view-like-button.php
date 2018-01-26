@@ -38,7 +38,6 @@ if(!metadata_exists('post',$post_id, 'lbfw_likes_count')) {
   add_post_meta( $post_id, 'lbfw_likes_count', 0);
 }
 ?>
-<div class="like-click">
-<h2 style="display: inline;"><a href="#"><span class="u-icon u-icon--thumbs-o-up"></h2>
-<div class="likebutton">... Loading Like count ...</div></span></a>
+<div class="like-button-container">
+<h3><a href="#"><span id="like-icon"></span></a><h3>
 </div>

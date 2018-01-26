@@ -76,10 +76,8 @@ class Like_Button_For_Wordpress_Model
     public function like_button_ajax_update_db()
     {
         // Post values returning from AJAX request
-        $post_id = $_POST['postID'];
+        $post_id          = $_POST['postID'];
         $like_count_value = $_POST['likeCountValue'];
-
-        $like_count_value = $like_count_value + 1;
 
         update_post_meta($post_id, 'lbfw_likes_count', $like_count_value);
 
