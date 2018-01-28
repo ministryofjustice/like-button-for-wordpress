@@ -9,6 +9,10 @@
 
   const LIKECLICK = document.querySelector(".like-button-container a");
 
+  if(isNaN(like_count)) {
+    var like_count = 0;
+  }
+
   // Like count comes in and displays on page.
   function set_count(like_count) {
     var html = '<span id="#like-icon" class="u-icon u-icon--thumbs-o-up">' + like_count + '</span>';
@@ -16,31 +20,29 @@
   }
   set_count(like_count);
 
-  function addup(like_count) {
-    var like_count = like_count + 1;
-    return like_count;
-  }
-  addup(like_count);
-
-  var newlikecount = addup(like_count);
-
-  function like_count_replace(e) {
+  function block(e) {
     e.preventDefault();
-
-    var newlikecount = addup(like_count);
-    var html = '<span class="u-icon u-icon--thumbs-o-up">' + newlikecount + '</span>';
-    $(".like-button-container a").replaceWith(html);
   }
-  set_count();
 
-  LIKECLICK.addEventListener('click', like_count_replace, false);
+  function like_count_replace(a) {
+    var a;
+    var a = a + 1;
+    var html = '<span class="u-icon u-icon--thumbs-o-up">' + a + '</span>';
+    $(".like-button-container a").replaceWith(html);
 
+    loadData(a);
+  }
+
+  LIKECLICK.addEventListener('click', function(e) {block(e); }, false);
+  LIKECLICK.addEventListener('click', function() {like_count_replace(like_count); }, false);
+
+function loadData(a) {
   //Using native Promises and Deferred AJAX structure
   $.ajax({
     url: wp_ajax,
     type: 'POST',
     data: ({
-      likeCountValue: newlikecount,
+      likeCountValue: a,
       postID: post_id,
       action: 'like_button_ajax_action',
     }),
@@ -57,5 +59,5 @@
       console.log('AJAX call completed');
     }
   })
-
+}
 })(jQuery);

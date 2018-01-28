@@ -67,7 +67,7 @@ class Like_Button_For_Wordpress_Manager
     public function __construct()
     {
         $this->plugin_slug = 'like-button-for-wordpress';
-        $this->version = '0.2.1';
+        $this->version = $timestamp=time();
 
         $this->load_dependencies();
         $this->define_admin_hooks();
