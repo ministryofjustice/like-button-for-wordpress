@@ -116,7 +116,7 @@ class Like_Button_For_Wordpress_Manager
         $this->loader->add_filter('the_content', $model, 'like_button_for_wordpress_view', 15,1);
         $this->loader->add_action('wp_enqueue_scripts', $model, 'enqueue_scripts');
         $this->loader->add_action( 'wp_ajax_nopriv_like_button_ajax_action', $model, 'like_button_ajax_update_db' );
-        $this->loader->add_action( 'wp_ajax_like_button_ajax_action', $model, 'like_button_ajax_update_db' );
+        $this->loader->add_action( 'wp_ajax_like_button_ajax_action', $model, 'like_button_ajax_update' );
 
     }
 

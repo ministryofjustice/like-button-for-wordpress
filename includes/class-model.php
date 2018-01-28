@@ -73,13 +73,29 @@ class Like_Button_For_Wordpress_Model
             );
     }
 
-    public function like_button_ajax_update_db()
+    public function like_button_ajax_update()
     {
         // Post values returning from AJAX request
         $post_id          = $_POST['postID'];
         $like_count_value = $_POST['likeCountValue'];
 
         update_post_meta($post_id, 'lbfw_likes_count', $like_count_value);
+
+        // Validates that there has been a like button click
+        $cookie_validation = $_POST['cookie'];
+        if($cookie_validation == 1) {
+
+          // Set array of post IDs in the cookie
+          $posts = array_key_exists('like-button-for-wordpress-plugin', $_COOKIE) ? (string) $_COOKIE['like-button-for-wordpress-plugin'] : [];
+
+          if (is_string($_COOKIE['like-button-for-wordpress-plugin'])) {
+              $posts = unserialize($posts);
+          }
+
+          $posts[$post_id] = null;
+          // Cookie set to six months
+          setcookie('like-button-for-wordpress-plugin', serialize($posts), time() + 86400 * 180, '/');
+        }
 
         wp_die();
     }

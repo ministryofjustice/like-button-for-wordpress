@@ -29,14 +29,14 @@
     var a = a + 1;
     var html = '<span class="u-icon u-icon--thumbs-o-up">' + a + '</span>';
     $(".like-button-container a").replaceWith(html);
-
-    loadData(a);
+    var b = 1;
+    loadData(a, b);
   }
 
   LIKECLICK.addEventListener('click', function(e) {block(e); }, false);
   LIKECLICK.addEventListener('click', function() {like_count_replace(like_count); }, false);
 
-function loadData(a) {
+function loadData(a,b) {
   //Using native Promises and Deferred AJAX structure
   $.ajax({
     url: wp_ajax,
@@ -44,6 +44,7 @@ function loadData(a) {
     data: ({
       likeCountValue: a,
       postID: post_id,
+      cookie: b,
       action: 'like_button_ajax_action',
     }),
 
