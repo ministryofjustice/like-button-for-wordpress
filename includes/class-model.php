@@ -37,6 +37,8 @@ class Like_Button_For_Wordpress_Model
     public function __construct($version)
     {
         $this->version = time();
+
+        require_once plugin_dir_path(__FILE__) . '../components/view-like-button.php';
     }
 
     /**
@@ -83,6 +85,9 @@ class Like_Button_For_Wordpress_Model
 
         // Validates that there has been a like button click
         $cookie_validation = $_POST['cookie'];
+
+        echo $cookie_validation;
+
         if($cookie_validation == 1) {
 
           // Set array of post IDs in the cookie
@@ -104,15 +109,15 @@ class Like_Button_For_Wordpress_Model
     /**
      * Loads the Like Button on any WP single page.
      */
-    public function like_button_for_wordpress_view($content)
-    {
-        if (is_single()) {
-            echo '<div id="blog-post-103">';
-            echo $content;
-            require_once plugin_dir_path(__FILE__) . '../components/view-like-button.php';
-            echo '</div>';
-        } else {
-            return $content;
-        }
-    }
+    // public function like_button_for_wordpress_view($content)
+    // {
+    //     if (is_single()) {
+    //         echo '<div id="blog-post-103">';
+    //         echo $content;
+    //         require_once plugin_dir_path(__FILE__) . '../components/view-like-button.php';
+    //         echo '</div>';
+    //     } else {
+    //         return $content;
+    //     }
+    // }
 }

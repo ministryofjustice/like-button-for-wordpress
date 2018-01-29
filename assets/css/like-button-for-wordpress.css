@@ -8,9 +8,7 @@
  */
  .u-icon {
    /* use !important to prevent issues with browser extensions that change fonts */
-   font-family: nta,sans-serif;
-   speak: none;
-   font-size: 2.2rem;
+   font-size: 2.1rem;
    font-style: normal;
    font-weight: normal;
    font-variant: normal;

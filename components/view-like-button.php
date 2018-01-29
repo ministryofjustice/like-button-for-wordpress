@@ -8,36 +8,31 @@
  * @package LBFW
  */
 
-$post_id = get_the_ID();
-
-if(!metadata_exists('post',$post_id, 'lbfw_likes_count')) {
-  add_post_meta( $post_id, 'lbfw_likes_count', 0);
+if (!metadata_exists('post', get_the_ID(), 'lbfw_likes_count')) {
+    add_post_meta(get_the_ID(), 'lbfw_likes_count', 0);
 }
 
-?>
-<?php
+function like_button_run($post_id, $posts)
+{
+    $post_id = get_the_ID();
 
-$posts = array_key_exists('like-button-for-wordpress-plugin', $_COOKIE) ? (string) $_COOKIE['like-button-for-wordpress-plugin'] : [];
+    $posts = array_key_exists('like-button-for-wordpress-plugin', $_COOKIE) ? (string) $_COOKIE['like-button-for-wordpress-plugin'] : [];
 
-if (is_string($_COOKIE['like-button-for-wordpress-plugin'])) {
-    $posts = unserialize($posts);
+    if (is_string($_COOKIE['like-button-for-wordpress-plugin'])) {
+        $posts = unserialize($posts);
+    }
+
+    if (!array_key_exists($post_id, $posts)) {
+        $result = '<div class="like-button-container">';
+        $result .= '<a href="#"><span id="like-icon"></span></a>';
+        $result .= '</div>';
+
+        echo $result;
+    } else {
+        $result = '<div class="like-button-container">';
+        $result .= '<span id="like-icon"></span>';
+        $result .= '</div>';
+
+        echo $result;
+    }
 }
-
-if(!array_key_exists($post_id, $posts)) {
-
-  $result = '<div class="like-button-container">';
-  $result .= '<a href="#"><span id="like-icon"></span></a>';
-  $result .= '</div>';
-
-  echo $result;
-
-} else {
-
-  $result = '<div class="like-button-container">';
-  $result .= '<span id="like-icon"></span>';
-  $result .= '</div>';
-
-  echo $result;
-}
-
-?>

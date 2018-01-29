@@ -8,8 +8,7 @@
       wp_ajax = LikeButtonData.adminAjaxWP;
 
 
-  const LIKECLICK = document.querySelector(".like-button-container a");
-
+  const LIKECLICK = document.querySelector(".like-button-container");
 
   if(isNaN(like_count)) {
     var like_count = 0;
@@ -39,7 +38,8 @@
   LIKECLICK.addEventListener('click', function() {like_count_replace(like_count); }, false);
 
 function loadData(a,b) {
-  //Using native Promises and Deferred AJAX structure
+
+  //Should be eventually refactored to use native Promises and Deferred AJAX structure.
   $.ajax({
     url: wp_ajax,
     type: 'POST',
