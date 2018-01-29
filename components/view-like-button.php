@@ -26,7 +26,7 @@ if (is_string($_COOKIE['like-button-for-wordpress-plugin'])) {
 if(!array_key_exists($post_id, $posts)) {
 
   $result = '<div class="like-button-container">';
-  $result .= '<h3><a href="#"><span id="like-icon"></span></a><h3>';
+  $result .= '<a href="#"><span id="like-icon"></span></a>';
   $result .= '</div>';
 
   echo $result;
@@ -34,7 +34,7 @@ if(!array_key_exists($post_id, $posts)) {
 } else {
 
   $result = '<div class="like-button-container">';
-  $result .= '<h3><span id="like-icon"></span><h3>';
+  $result .= '<span id="like-icon"></span>';
   $result .= '</div>';
 
   echo $result;

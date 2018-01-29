@@ -36,7 +36,7 @@ class Like_Button_For_Wordpress_Model
      */
     public function __construct($version)
     {
-        $this->version = $version;
+        $this->version = time();
     }
 
     /**

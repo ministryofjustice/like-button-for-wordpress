@@ -7,7 +7,9 @@
       like_count = parseInt(LikeButtonData.likeButtonCount);
       wp_ajax = LikeButtonData.adminAjaxWP;
 
+
   const LIKECLICK = document.querySelector(".like-button-container a");
+
 
   if(isNaN(like_count)) {
     var like_count = 0;
