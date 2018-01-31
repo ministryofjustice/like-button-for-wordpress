@@ -36,7 +36,7 @@ class Like_Button_For_Wordpress_Model
      */
     public function __construct($version)
     {
-        $this->version = time();
+        $this->version = $version;
 
         require_once plugin_dir_path(__FILE__) . '../components/view-like-button.php';
     }
@@ -68,16 +68,15 @@ class Like_Button_For_Wordpress_Model
           wp_localize_script('like-button-for-wordpress', 'LikeButtonData',
               [
                 'currentPostID' => get_the_ID(),
-                'likeButtonCount'  => get_post_meta(get_the_ID(), 'lbfw_likes_count'),
+                'likeButtonCount'  => get_post_meta(get_the_ID(), 'lbfw_likes_count', true),
                 'adminAjaxWP'  => admin_url('admin-ajax.php')
-
               ]
             );
     }
 
     public function like_button_ajax_update()
     {
-        // Post values returning from AJAX request
+        // Values returned from AJAX (like-button-for-wordpress.js)
         $post_id          = $_POST['postID'];
         $like_count_value = $_POST['likeCountValue'];
 
@@ -86,28 +85,23 @@ class Like_Button_For_Wordpress_Model
         // Validates that there has been a like button click
         $cookie_validation = $_POST['cookie'];
 
-        echo $cookie_validation;
-
-        if($cookie_validation == 1) {
-
-          // Set array of post IDs in the cookie
+        if ($cookie_validation == 1) {
+            // Set array of post IDs in the cookie
           $posts = array_key_exists('like-button-for-wordpress-plugin', $_COOKIE) ? (string) $_COOKIE['like-button-for-wordpress-plugin'] : [];
 
-          if (is_string($_COOKIE['like-button-for-wordpress-plugin'])) {
-              $posts = unserialize($posts);
-          }
+            if (is_string($_COOKIE['like-button-for-wordpress-plugin'])) {
+                $posts = unserialize($posts);
+            }
 
-          $posts[$post_id] = null;
+            $posts[$post_id] = null;
           // Cookie set to six months
           setcookie('like-button-for-wordpress-plugin', serialize($posts), time() + 86400 * 180, '/');
         }
-
         wp_die();
     }
 
-
     /**
-     * Loads the Like Button on any WP single page.
+     * Loads the Like Button on any WP single page. Implement in future versions.
      */
     // public function like_button_for_wordpress_view($content)
     // {

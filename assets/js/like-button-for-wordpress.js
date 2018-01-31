@@ -2,65 +2,43 @@
 
 (function($) {
 
-  // Object variables assigned to data passed on from wp_localize_script() in class-model.php
-  var post_id = parseInt(LikeButtonData.currentPostID);
-      like_count = parseInt(LikeButtonData.likeButtonCount);
-      wp_ajax = LikeButtonData.adminAjaxWP;
+  function loadData() {
 
+    // Loading required variables. These are loaded in via WP wp_localize_script (see class-model.php)
+    var post_id     = LikeButtonData.currentPostID;
+    var like_count  = LikeButtonData.likeButtonCount;
+    var wp_ajax     = LikeButtonData.adminAjaxWP;
 
-  const LIKECLICK = document.querySelector(".like-button-container");
+    // Set up the new AJAX request to the server. I've used Javascript rather then JQuery here as IE8 and lower have problems with AJAX via JQuery.
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', wp_ajax, true);
+    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+    xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
 
-  if(isNaN(like_count)) {
-    var like_count = 0;
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState == 4 && xhr.status == 200) {
+        var like_count = LikeButtonData.likeButtonCount;
+        var like_count = ++like_count;
+        update_likes(like_count);
+      }
+    };
+
+    var like_count = ++like_count;
+    var action = 'like_button_ajax_action';
+    var post = 'action=' + action + '&postID=' + post_id + '&likeCountValue=' + like_count + '&cookie=1';
+
+    xhr.send(post);
   }
 
-  // Like count comes in and displays on page.
-  function set_count(like_count) {
-    var html = '<span id="#like-icon" class="u-icon u-icon--thumbs-o-up">' + like_count + '</span>';
-    $("#like-icon").replaceWith(html);
-  }
-  set_count(like_count);
-
-  function block(e) {
-    e.preventDefault();
+  // On click this swaps in the new count on the page. For returning visitors and on page load. I'm using PHP logic for this process. See view-like-button.php
+  function update_likes(count) {
+    var html = '<span class="like-button-count-unclicked"><span class="u-icon u-icon--thumbs-o-up"></span>' + ' ' + '<span class="like-button-number">' + count + '</span>' + '</span>';
+    $(".like-button-container").replaceWith(html);
   }
 
-  function like_count_replace(a) {
-    var a;
-    var a = a + 1;
-    var html = '<span class="u-icon u-icon--thumbs-o-up">' + a + '</span>';
-    $(".like-button-container a").replaceWith(html);
-    var b = 1;
-    loadData(a, b);
+  var buttons = document.getElementsByClassName("like-button-count");
+  for (i = 0; i < buttons.length; i++) {
+    buttons.item(i).addEventListener("click", loadData, false);
   }
 
-  LIKECLICK.addEventListener('click', function(e) {block(e); }, false);
-  LIKECLICK.addEventListener('click', function() {like_count_replace(like_count); }, false);
-
-function loadData(a,b) {
-
-  //Should be eventually refactored to use native Promises and Deferred AJAX structure.
-  $.ajax({
-    url: wp_ajax,
-    type: 'POST',
-    data: ({
-      likeCountValue: a,
-      postID: post_id,
-      cookie: b,
-      action: 'like_button_ajax_action',
-    }),
-
-    success: function() {
-      console.log('success');
-    },
-
-    error: function() {
-      console.log('AJAX something went wrong');
-    },
-
-    complete: function() {
-      console.log('AJAX call completed');
-    }
-  })
-}
 })(jQuery);

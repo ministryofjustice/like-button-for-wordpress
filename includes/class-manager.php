@@ -67,7 +67,7 @@ class Like_Button_For_Wordpress_Manager
     public function __construct()
     {
         $this->plugin_slug = 'like-button-for-wordpress';
-        $this->version = $timestamp=time();
+        $this->version = $version;
 
         $this->load_dependencies();
         $this->define_admin_hooks();
@@ -116,10 +116,12 @@ class Like_Button_For_Wordpress_Manager
         $this->loader->add_action('admin_menu', $admin, 'like_button_for_wordpress_menu');
 
         // Adds frontend WP hooks
-        //$this->loader->add_filter('the_content', $model, 'like_button_for_wordpress_view', 15,1);
         $this->loader->add_action('wp_enqueue_scripts', $model, 'enqueue_scripts');
         $this->loader->add_action( 'wp_ajax_nopriv_like_button_ajax_action', $model, 'like_button_ajax_update' );
         $this->loader->add_action( 'wp_ajax_like_button_ajax_action', $model, 'like_button_ajax_update' );
+
+        // To be added in future versions. Allows for auto loading like button rather than shortcode.
+        //$this->loader->add_filter('the_content', $model, 'like_button_for_wordpress_view', 15,1);
     }
 
     /**
