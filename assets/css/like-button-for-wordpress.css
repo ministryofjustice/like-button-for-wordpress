@@ -7,31 +7,6 @@
  * @package LBFW
  */
 
-/* Button reset =========== */
-
-button, input[type="submit"], input[type="reset"] {
-  background: none !important;
-  color: grey;
-  border: none;
-  padding: 0! important;
-  font: inherit;
-  cursor: pointer;
-  outline: inherit !important;
-}
-
-.u-icon {
-  /* use !important to prevent issues with browser extensions that change fonts */
-  font-size: 2.1rem;
-  font-style: normal;
-  font-weight: normal;
-  font-variant: normal;
-  text-transform: none;
-  line-height: 1;
-  /* Better Font Rendering =========== */
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
 .u-icon--thumbs-o-up:before {
   content: "\f087";
   padding-right: 2px;
@@ -44,6 +19,11 @@ button, input[type="submit"], input[type="reset"] {
 
 .like-button-count {
   color: #005ea5;
+  background: none;
+  padding:0;
+  cursor: pointer;
+  outline: inherit;
+  border: none;
 }
 
 .like-button-count-clicked {
