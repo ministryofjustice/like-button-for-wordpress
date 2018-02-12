@@ -28,7 +28,6 @@ class Like_Button_For_Wordpress_Model
      * @var string $version The current version of the plugin.
      */
     private $version;
-
     /**
      * Initializes this class and stores the current version of this plugin.
      *
@@ -77,10 +76,15 @@ class Like_Button_For_Wordpress_Model
     public function like_button_ajax_update()
     {
         // Values returned from AJAX (like-button-for-wordpress.js)
-        $post_id          = $_POST['postID'];
+        $post_id = $_POST['postID'];
         $like_count_value = $_POST['likeCountValue'];
 
+        $comment_id = $_POST['commentID'];
+        $like_comment_count_value = $_POST['likeCommentCountValue'];
+
+        // Update the database
         update_post_meta($post_id, 'lbfw_likes_count', $like_count_value);
+        update_comment_meta($comment_id, 'lbfw_likes_comment_count', $like_comment_count_value);
 
         // Validates that there has been a like button click
         $cookie_validation = $_POST['cookie'];
@@ -97,6 +101,20 @@ class Like_Button_For_Wordpress_Model
           // Cookie set to six months
           setcookie('like-button-for-wordpress-plugin', serialize($posts), time() + 86400 * 180, '/');
         }
+
+        if ($cookie_validation == 2) {
+            // Set array of post IDs in the cookie
+          $comments = array_key_exists('like-button-for-wordpress-plugin-comments', $_COOKIE) ? (string) $_COOKIE['like-button-for-wordpress-plugin-comments'] : [];
+
+            if (is_string($_COOKIE['like-button-for-wordpress-plugin-comments'])) {
+                $comments = unserialize($comments);
+            }
+
+            $comments[$comment_id] = null;
+          // Cookie set to six months
+          setcookie('like-button-for-wordpress-plugin-comments', serialize($comments), time() + 86400 * 180, '/');
+        }
+
         wp_die();
     }
 

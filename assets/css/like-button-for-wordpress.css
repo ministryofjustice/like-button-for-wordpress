@@ -17,7 +17,7 @@
   font-size: 2.1rem;
 }
 
-.like-button-count {
+.like-button-count, .like-button-comment-count {
   color: #005ea5;
   background: none;
   padding:0;
@@ -26,6 +26,6 @@
   border: none;
 }
 
-.like-button-count-clicked {
+.like-button-count-clicked, .like-button-comment-count-clicked {
   color: grey;
 }
