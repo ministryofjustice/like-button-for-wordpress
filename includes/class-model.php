@@ -47,6 +47,7 @@ class Like_Button_For_Wordpress_Model
      */
     public function enqueue_scripts()
     {
+
         wp_enqueue_script(
               'like-button-for-wordpress',
               plugin_dir_url(__FILE__) . '../assets/js/like-button-for-wordpress.js',

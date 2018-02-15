@@ -57,7 +57,7 @@ function like_button_run()
         // If the post id does not appear in the browser cookie display one result, if it is display another.
         if (!array_key_exists($post_id, $posts)) {
             $result = '<div class="like-button-container">';
-            $result .= '<button class="like-button-count"><span class="u-icon u-icon--thumbs-o-up"></span>' . ' ' . '<span class="like-button-number">' . $db_like_count . '</span>' . '</button>';
+            $result .= '<button class="like-button-count" id="post-like-button"><span class="u-icon u-icon--thumbs-o-up"></span>' . ' ' . '<span class="like-button-number">' . $db_like_count . '</span>' . '</button>';
             $result .= '</div>';
 
             echo $result;
@@ -72,7 +72,7 @@ function like_button_run()
 
     if (!empty($comment_id)) {
         if (!array_key_exists($comment_id, $comments)) {
-            $result = '<div class="like-button-container-comments">';
+            $result = '<div class="like-button-container-comments" data-comment-like-count='. $comment_count .' data-comment-id='. $comment_id .'>';
             $result .= '<button class="like-button-comment-count"><span class="u-icon u-icon--thumbs-o-up"></span>' . ' ' . '<span class="like-button-number">' . $comment_count . '</span>' . '</button>';
             $result .= '</div>';
 
