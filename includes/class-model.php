@@ -68,7 +68,7 @@ class Like_Button_For_Wordpress_Model
           wp_localize_script('like-button-for-wordpress', 'LikeButtonData',
               [
                 'currentPostID' => get_the_ID(),
-                'likeButtonCount'  => get_post_meta(get_the_ID(), 'lbfw_likes_count', true),
+                'likeButtonCount'  => get_post_meta(get_the_ID(), 'lbfw_likes', true),
                 'adminAjaxWP'  => admin_url('admin-ajax.php')
               ]
             );
@@ -84,8 +84,8 @@ class Like_Button_For_Wordpress_Model
         $like_comment_count_value = $_POST['likeCommentCountValue'];
 
         // Update the database
-        update_post_meta($post_id, 'lbfw_likes_count', $like_count_value);
-        update_comment_meta($comment_id, 'lbfw_likes_count', $like_comment_count_value);
+        update_post_meta($post_id, 'lbfw_likes', $like_count_value);
+        update_comment_meta($comment_id, 'lbfw_likes', $like_comment_count_value);
 
         // Validates that there has been a like button click
         $cookie_validation = $_POST['cookie'];
