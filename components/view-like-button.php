@@ -18,8 +18,8 @@ function like_button_run()
     }
 
     // Checks WP database, if comment meta doesn't exist add a new entry into the database.
-    if (!metadata_exists('comment', get_comment_ID(), 'lbfw_likes_comment_count')) {
-        add_comment_meta(get_comment_ID(), 'lbfw_likes_comment_count', 0);
+    if (!metadata_exists('comment', get_comment_ID(), 'lbfw_likes_count')) {
+        add_comment_meta(get_comment_ID(), 'lbfw_likes_count', 0);
     }
 
     /**
@@ -32,7 +32,7 @@ function like_button_run()
     $comment_id = get_comment_ID();
     // Return like count from database (WP Post Meta)
     $db_like_count = get_post_meta(get_the_ID(), 'lbfw_likes_count', true);
-    $comment_count = get_comment_meta(get_comment_ID(), 'lbfw_likes_comment_count', true);
+    $comment_count = get_comment_meta(get_comment_ID(), 'lbfw_likes_count', true);
 
     if (empty($db_like_count)) {
         $db_like_count = 0;

@@ -85,7 +85,7 @@ class Like_Button_For_Wordpress_Model
 
         // Update the database
         update_post_meta($post_id, 'lbfw_likes_count', $like_count_value);
-        update_comment_meta($comment_id, 'lbfw_likes_comment_count', $like_comment_count_value);
+        update_comment_meta($comment_id, 'lbfw_likes_count', $like_comment_count_value);
 
         // Validates that there has been a like button click
         $cookie_validation = $_POST['cookie'];
