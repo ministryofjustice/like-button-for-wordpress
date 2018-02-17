@@ -7,10 +7,38 @@
  * @package LBFW
  */
 
+pre {
+  padding: 10px;
+  margin: 0;
+  overflow: auto;
+  overflow-y: hidden;
+  font-size: 16px;
+  line-height: 40px;
+  background: #efefef;
+}
+
+pre code {
+  padding: 10px;
+  color: #333;
+}
+
+.card-primary {
+  float: left;
+  border: none;
+  background-color: #f7f7f7;
+}
+
+.card-secondary {
+  float: left;
+  margin-left: 1%;
+  border: none;
+  background-color: #f7f7f7;
+}
+
 #like-button-for-wordpress-data {
-    width:  100%;
+  width: 100%;
 }
 
 #like-button-for-wordpress-data .key {
-    font-weight: bold;
+  font-weight: bold;
 }
