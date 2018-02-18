@@ -46,6 +46,22 @@
 if (! defined('ABSPATH')) {
     die();
 }
+
+/**
+ * Uninstall plugin
+ */
+register_uninstall_hook(__FILE__, 'lbfw_on_uninstall');
+
+function lbfw_on_uninstall()
+{
+    if (!current_user_can('activate_plugins')) {
+        return;
+    }
+    // Drop post and comment like database meta keys
+    delete_post_meta_by_key('lbfw_likes');
+    delete_metadata('comment', null, 'lbfw_likes', '', true);
+}
+
 /**
  * Include the core class responsible for loading all necessary components of the plugin.
  */

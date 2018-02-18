@@ -71,6 +71,7 @@ class Like_Button_For_Wordpress_Manager
 
         $this->load_dependencies();
         $this->define_admin_hooks();
+        $this->define_lbfw_hooks();
     }
 
     /**
@@ -89,7 +90,7 @@ class Like_Button_For_Wordpress_Manager
     {
         require_once plugin_dir_path(dirname(__FILE__)) . 'admin/class-admin-manager.php';
         require_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-model.php';
-        require_once plugin_dir_path(__FILE__) . 'class-loader.php';
+        require_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-loader.php';
 
         add_shortcode('likebutton', 'like_button_run');
 
@@ -108,13 +109,15 @@ class Like_Button_For_Wordpress_Manager
     private function define_admin_hooks()
     {
         $admin = new Like_Button_For_Wordpress_Admin($this->get_version());
-        $model = new Like_Button_For_Wordpress_Model($this->get_version());
 
-        // Adds backend admin WP hooks
         $this->loader->add_action('admin_enqueue_scripts', $admin, 'enqueue_styles');
         $this->loader->add_action('admin_menu', $admin, 'like_button_for_wordpress_menu');
+    }
 
-        // Adds frontend WP hooks
+    private function define_lbfw_hooks()
+    {
+        $model = new Like_Button_For_Wordpress_Model($this->get_version());
+
         $this->loader->add_action('wp_enqueue_scripts', $model, 'enqueue_scripts');
         $this->loader->add_action('wp_ajax_nopriv_like_button_ajax_action', $model, 'like_button_ajax_update');
         $this->loader->add_action('wp_ajax_like_button_ajax_action', $model, 'like_button_ajax_update');

@@ -17,21 +17,22 @@
 $plugin_version = $this->version;
 ?>
 
-<h1>Like Button For Wordpress Settings</h1>
-<div class="wrap">
 
+<div class="wrap">
+  <h1>Like Button For Wordpress Settings</h1>
   <div class="card card-primary">
-    <p>You can add the like button on your post or comment in two ways. Either via adding the PHP code or using the shortcode. Add the Like Button to your site's code use:</p>
+    <h2>Add a Like Button to your page</h2>
+    <p>You can add the Like Button on your post or comment in two ways. Either via adding the PHP code or using the shortcode. Add the Like Button to your site's code use:</p>
     <pre>&lt;?php echo do_shortcode('[likebutton]'); ?&gt;</pre>
     <p>For best results this should be placed within the WP loop somewhere under the body text of the page. For comments, place within the individual comment block of code.</p>
     <p>Or</p>
-    <p>Copy and paste shortcode into your post:</p>
+    <p>Copy and paste shortcode into your post via the WP editor admin screen:</p>
     <pre>[likebutton]</pre>
   </div>
 
   <div class="card card-secondary">
     <ul>
-      <li><h1>Plugin details</h1></li>
+      <li><h2>About this plugin</h2></li>
       <li>Plugin Name: Like Button For Wordpress</li>
       <li>Plugin URI: <a href="https://github.com/ministryofjustice/like-button-for-wordpress"> https://github.com/ministryofjustice/like-button-for-wordpress</a></li>
       <li>Description: Adds 'like' button functionality to your WP site.</li>
