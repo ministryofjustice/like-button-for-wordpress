@@ -11,7 +11,7 @@
  * @wordpress-plugin
  * Plugin Name:       Like Button For Wordpress
  * Plugin URI:        http://wordpress.org/extend/plugins/
- * Description:       Adds 'like' button functionality to your WP site.
+ * Description:       Adds a Like Button to your Wordpress site.
  * Version:           1.0.0
  * Text Domain:       like-button-for-wordpress
  * Domain Path:       /languages
@@ -46,10 +46,26 @@
 if (! defined('ABSPATH')) {
     die();
 }
+
+/**
+ * Uninstall plugin
+ */
+register_uninstall_hook(__FILE__, 'lbfw_on_uninstall');
+
+function lbfw_on_uninstall()
+{
+    if (!current_user_can('activate_plugins')) {
+        return;
+    }
+    // Drop post and comment like database meta keys
+    delete_post_meta_by_key('lbfw_likes');
+    delete_metadata('comment', null, 'lbfw_likes', '', true);
+}
+
 /**
  * Include the core class responsible for loading all necessary components of the plugin.
  */
-require_once plugin_dir_path(__FILE__) . 'includes/class-like-button-for-wordpress-manager.php';
+require_once plugin_dir_path(__FILE__) . 'includes/class-manager.php';
 
 /**
  * Instantiates the run Like Button For Wordpress class and then

@@ -66,11 +66,12 @@ class Like_Button_For_Wordpress_Manager
      */
     public function __construct()
     {
-        $this->plugin_slug = 'like-button-for-wordpress-slug';
-        $this->version = '0.2.0';
+        $this->plugin_slug = 'like-button-for-wordpress';
+        $this->version = '1.0.0';
 
         $this->load_dependencies();
         $this->define_admin_hooks();
+        $this->define_lbfw_hooks();
     }
 
     /**
@@ -87,10 +88,12 @@ class Like_Button_For_Wordpress_Manager
      */
     private function load_dependencies()
     {
-        require_once plugin_dir_path(dirname(__FILE__)) . 'admin/class-like-button-for-wordpress-admin.php';
-        require_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-like-button-for-wordpress-view.php';
+        require_once plugin_dir_path(dirname(__FILE__)) . 'admin/class-admin-manager.php';
+        require_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-model.php';
+        require_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-loader.php';
 
-        require_once plugin_dir_path(__FILE__) . 'class-like-button-for-wordpress-loader.php';
+        add_shortcode('likebutton', 'like_button_run');
+
         $this->loader = new Like_Button_For_Wordpress_Loader();
     }
 
@@ -106,12 +109,21 @@ class Like_Button_For_Wordpress_Manager
     private function define_admin_hooks()
     {
         $admin = new Like_Button_For_Wordpress_Admin($this->get_version());
-        $view = new Like_Button_For_Wordpress_View($this->get_version());
 
         $this->loader->add_action('admin_enqueue_scripts', $admin, 'enqueue_styles');
-        $this->loader->add_action('add_meta_boxes', $admin, 'add_meta_box');
         $this->loader->add_action('admin_menu', $admin, 'like_button_for_wordpress_menu');
-        $this->loader->add_filter('the_content', $view, 'like_button_for_wordpress_view');
+    }
+
+    private function define_lbfw_hooks()
+    {
+        $model = new Like_Button_For_Wordpress_Model($this->get_version());
+
+        $this->loader->add_action('wp_enqueue_scripts', $model, 'enqueue_scripts');
+        $this->loader->add_action('wp_ajax_nopriv_like_button_ajax_action', $model, 'like_button_ajax_update');
+        $this->loader->add_action('wp_ajax_like_button_ajax_action', $model, 'like_button_ajax_update');
+
+        // To be added in future versions. Allows for auto loading like button rather than shortcode.
+        //$this->loader->add_filter('the_content', $model, 'like_button_for_wordpress_view', 15,1);
     }
 
     /**
