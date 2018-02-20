@@ -37,7 +37,7 @@ function like_button_run()
       }
 
     // Required to format the cookie's array correctly into the post ID.
-    if (is_string($_COOKIE['like-button-for-wordpress-plugin'])) {
+    if (is_string(isset($_COOKIE['like-button-for-wordpress-plugin']))) {
         $posts = unserialize($posts);
     }
 
@@ -75,7 +75,7 @@ function like_button_run()
       }
 
     // Required to format the cookie's array correctly into the post ID.
-    if (is_string($_COOKIE['like-button-for-wordpress-plugin-comments'])) {
+    if (is_string(isset($_COOKIE['like-button-for-wordpress-plugin-comments']))) {
         $comments = unserialize($comments);
     }
       // Check if the comment id is in the cookie. If it is then display else so visitor can't click again.
