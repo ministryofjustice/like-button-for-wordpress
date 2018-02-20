@@ -16,8 +16,7 @@ function like_button_run()
   * Likes displayed on posts
   */
   if (!get_comment()) {
-
-    $post_id = get_the_ID();
+      $post_id = get_the_ID();
 
     // Checks WP database, if post meta doesn't exist add a new entry into the database.
     if (!metadata_exists('post', get_the_ID(), 'lbfw_likes')) {
@@ -36,10 +35,12 @@ function like_button_run()
           $db_like_count = 0;
       }
 
-    // Required to format the cookie's array correctly into the post ID.
-    if (is_string(isset($_COOKIE['like-button-for-wordpress-plugin']))) {
-        $posts = unserialize($posts);
-    }
+      if (isset($_COOKIE['like-button-for-wordpress-plugin'])) {
+          // Required to format the cookie's array correctly into the post ID.
+        if (is_string($_COOKIE['like-button-for-wordpress-plugin'])) {
+            $posts = unserialize($posts);
+        }
+      }
 
     // Check if the post id is in the cookie. If it is then display else so visitor can't click again.
     if (!array_key_exists($post_id, $posts)) {
@@ -74,10 +75,12 @@ function like_button_run()
           $comment_count = 0;
       }
 
-    // Required to format the cookie's array correctly into the post ID.
-    if (is_string(isset($_COOKIE['like-button-for-wordpress-plugin-comments']))) {
-        $comments = unserialize($comments);
-    }
+      if (isset($_COOKIE['like-button-for-wordpress-plugin-comments'])) {
+          // Required to format the cookie's array correctly into the post ID.
+        if (is_string(isset($_COOKIE['like-button-for-wordpress-plugin-comments']))) {
+            $comments = unserialize($comments);
+        }
+      }
       // Check if the comment id is in the cookie. If it is then display else so visitor can't click again.
       if (!array_key_exists($comment_id, $comments)) {
           $result = '<div class="like-button-container-comments" data-comment-like-count='. $comment_count .' data-comment-id='. $comment_id .'>';
