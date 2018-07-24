@@ -9,9 +9,13 @@
 
   function loadData(e) {
 
+    var postID = '';
+    var likeCount = '';
+    
     var postID = LikeButtonData.currentPostID;
     var likeCount = LikeButtonData.likeButtonCount;
     var wpAjax = LikeButtonData.adminAjaxWP;
+    var nonce = LikeButtonData.likeNonce;
 
     e.preventDefault();
 
@@ -27,7 +31,8 @@
           likeCountValue: likeCount,
           postID: postID,
           cookie: '1',
-          action: 'like_button_ajax_action'
+          action: 'like_button_ajax_action',
+          security: nonce,
         }),
       complete: updateLikes
     });
@@ -54,11 +59,13 @@
       var addClicked = $(this).addClass("clicked");
       var likeCount = $(this).data("comment-like-count");
       var commentID = $(this).data("comment-id");
+      var nonce = LikeButtonData.likeNonce;
     } else {
       var container = $(e.srcElement).parent();
       var addClicked = container.addClass("clicked");
       var likeCount = container.data("comment-like-count");
       var commentID = container.data("comment-id");
+      var nonce = LikeButtonData.likeNonce;
     }
 
     var wpAjax = LikeButtonData.adminAjaxWP;
@@ -75,7 +82,8 @@
           likeCommentCountValue: likeCount,
           commentID: commentID,
           cookie: '2',
-          action: 'like_button_ajax_action'
+          action: 'like_button_ajax_action',
+          security: nonce,
         }),
       complete: updateLikes
     });
