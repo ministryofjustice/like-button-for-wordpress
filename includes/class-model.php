@@ -103,7 +103,7 @@ class Like_Button_For_Wordpress_Model
 
             $posts[$post_id] = null;
             // Cookie set to six months
-            setcookie('like-button-for-wordpress-plugin', serialize($posts), time() + 86400 * 180, '/');
+            setcookie('like-button-for-wordpress-plugin', serialize($posts), time() + 86400 * 180, '/', "", false, true);
         }
 
         if ($cookie_validation == 2) {
@@ -116,7 +116,7 @@ class Like_Button_For_Wordpress_Model
 
             $comments[$comment_id] = null;
             // Cookie set to six months
-            setcookie('like-button-for-wordpress-plugin-comments', serialize($comments), time() + 86400 * 180, '/');
+            setcookie('like-button-for-wordpress-plugin-comments', serialize($comments), time() + 86400 * 180, '/', "", false, true);
         }
 
         wp_die();
