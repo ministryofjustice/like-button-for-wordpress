@@ -73,7 +73,7 @@ class Like_Button_For_Wordpress_Admin
               'administrator',
               'like-button-for-wordpress-admin-page',
               [$this, 'render_like_button_admin_page'],
-              '10'
+              10
           );
     }
 
