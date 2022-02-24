@@ -38,7 +38,13 @@
     });
 
     function updateLikes(count) {
-      var html = '<span class="like-button-count-clicked"><span class="u-icon u-icon--thumbs-o-up"></span>' + ' ' + '<span class="like-button-number">' + count + '</span>' + '</span>';
+      if (count == 1) {
+        var likeCountText = count + " person liked this" 
+      } else {
+        var likeCountText = count + " people liked this" 
+      }
+
+      var html = '<span aria-label="'+ likeCountText +'" class="like-button-count-clicked"><span class="u-icon u-icon--thumbs-o-up"></span>' + ' ' + '<span class="like-button-number">' + count + '</span>' + '</span>';
       $(".like-button-container").replaceWith(html);
     }
   }
@@ -90,7 +96,13 @@
   }
 
   function updateLikes(count) {
-    var html = '<div class="like-button-comment-count-clicked"><span class="u-icon u-icon--thumbs-o-up"></span>' + ' ' + '<span class="like-button-number">' + count + '</span>' + '</div>';
+    if (count == 1) {
+      var likeCountText = count + " person liked this" 
+    } else {
+      var likeCountText = count + " people liked this" 
+    }
+
+    var html = '<div aria-label="'+ likeCountText +'" class="like-button-comment-count-clicked"><span class="u-icon u-icon--thumbs-o-up"></span>' + ' ' + '<span class="like-button-number">' + count + '</span>' + '</div>';
     $(".clicked").replaceWith(html);
   }
 
