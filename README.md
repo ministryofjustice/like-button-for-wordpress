@@ -8,8 +8,6 @@
 
 A WordPress plugin that adds a like button to your posts and pages.
 
----
-
 </div>
 
 <br>
