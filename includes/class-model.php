@@ -94,32 +94,28 @@ class Like_Button_For_Wordpress_Model
         $cookie_validation = sanitize_text_field($_POST['cookie']);
 
         if ($cookie_validation == 1) {
-            // Set array of post IDs in the cookie
-            $posts = array_key_exists('like-button-for-wordpress-plugin', $_COOKIE) ? (string) $_COOKIE['like-button-for-wordpress-plugin'] : [];
-
-            if (is_string($_COOKIE['like-button-for-wordpress-plugin'])) {
-                $posts = unserialize($posts);
-            }
-
-            $posts[$post_id] = null;
-            // Cookie set to six months
-            setcookie('like-button-for-wordpress-plugin', serialize($posts), time() + 86400 * 180, '/');
+            $this->set_cookie_value('like-button-for-wordpress-plugin', $post_id);
         }
 
         if ($cookie_validation == 2) {
-            // Set array of post IDs in the cookie
-            $comments = array_key_exists('like-button-for-wordpress-plugin-comments', $_COOKIE) ? (string) $_COOKIE['like-button-for-wordpress-plugin-comments'] : [];
-
-            if (is_string($_COOKIE['like-button-for-wordpress-plugin-comments'])) {
-                $comments = unserialize($comments);
-            }
-
-            $comments[$comment_id] = null;
-            // Cookie set to six months
-            setcookie('like-button-for-wordpress-plugin-comments', serialize($comments), time() + 86400 * 180, '/');
+            $this->set_cookie_value('like-button-for-wordpress-plugin-comments', $post_id);
         }
 
         wp_die();
+    }
+
+    public function set_cookie_value($key, $id)
+    {
+        // Set array of post IDs in the cookie
+        $posts = (string) $_COOKIE[$key] ?? [];
+
+        if (is_string($posts)) {
+            $posts = unserialize($posts);
+        }
+
+        $posts[$id] = null;
+        // Cookie set to six months
+        setcookie($key, serialize($posts), time() + 86400 * 180, '/');
     }
 
     /**
