@@ -13,10 +13,10 @@
  * @since 1.0.0
  */
 
- // Exit if file is accessed directly.
- if (! defined('ABSPATH')) {
-     die();
- }
+// Exit if file is accessed directly.
+if (!defined('ABSPATH')) {
+    die();
+}
 
 class Like_Button_For_Wordpress_Model
 {
@@ -27,13 +27,14 @@ class Like_Button_For_Wordpress_Model
      * @access private
      * @var string $version The current version of the plugin.
      */
-    private $version;
+    private string $version;
+
     /**
      * Initializes this class and stores the current version of this plugin.
      *
      * @param string $version The current version of this plugin.
      */
-    public function __construct($version)
+    public function __construct(string $version)
     {
         $this->version = $version;
 
@@ -47,58 +48,46 @@ class Like_Button_For_Wordpress_Model
      */
     public function enqueue_scripts()
     {
-        wp_enqueue_script(
-              'like-button-for-wordpress',
-              plugin_dir_url(__FILE__) . '../assets/js/like-button-for-wordpress.js',
-              array(),
-              $this->version,
-              true
-          );
+        $handle = 'like-button-for-wordpress';
+        $src = plugin_dir_url(__FILE__) . '../assets';
 
-        wp_enqueue_style(
-              'like-button-for-wordpress',
-              plugin_dir_url(__FILE__) . '../assets/css/like-button-for-wordpress.css',
-              array(),
-              $this->version,
-              false
-          );
+        wp_enqueue_script($handle, $src . '/js/' . $handle. '.js', [], $this->version, true);
+        wp_enqueue_style($handle, $src . '/css/' . $handle. '.css', [], $this->version);
 
         // Passes WP/PHP data to the enqueued Javascript file
         wp_localize_script(
-              'like-button-for-wordpress',
-              'LikeButtonData',
-              [
+            $handle,
+            'LikeButtonData',
+            [
                 'currentPostID' => get_the_ID(),
                 'likeNonce' => wp_create_nonce('like_button_nonce'),
-                'likeButtonCount'  => get_post_meta(get_the_ID(), 'lbfw_likes', true),
-                'adminAjaxWP'  => admin_url('admin-ajax.php')
-              ]
-            );
+                'likeButtonCount' => get_post_meta(get_the_ID(), 'lbfw_likes', true),
+                'adminAjaxWP' => admin_url('admin-ajax.php')
+            ]
+        );
     }
 
     public function like_button_ajax_update()
     {
-        $likeNonce = check_ajax_referer('like_button_nonce', 'security');
+        check_ajax_referer('like_button_nonce', 'security');
 
         // Values returned from AJAX (like-button-for-wordpress.js)
-        $post_id = isset($_POST['postID']) ? sanitize_text_field($_POST['postID']): null;
-        $like_count_value = isset($_POST['likeCountValue']) ? sanitize_text_field($_POST['likeCountValue']): null;
-        $comment_id = isset($_POST['commentID']) ? sanitize_text_field($_POST['commentID']): null;
-        $like_comment_count_value = isset($_POST['likeCommentCountValue']) ? sanitize_text_field($_POST['likeCommentCountValue']): null;
+        $post_id = sanitize_text_field($_POST['postID'] ?? null);
+        $like_count_value = sanitize_text_field($_POST['likeCountValue'] ?? null);
+        $comment_id = sanitize_text_field($_POST['commentID'] ?? null);
+        $like_comment_count_value = sanitize_text_field($_POST['likeCommentCountValue'] ?? null);
 
         // Update the database
         update_post_meta($post_id, 'lbfw_likes', $like_count_value);
         update_comment_meta($comment_id, 'lbfw_likes', $like_comment_count_value);
 
         // Validates that there has been a like button click
-        $cookie_validation = sanitize_text_field($_POST['cookie']);
-
-        if ($cookie_validation == 1) {
-            $this->set_cookie_value('like-button-for-wordpress-plugin', $post_id);
-        }
-
-        if ($cookie_validation == 2) {
-            $this->set_cookie_value('like-button-for-wordpress-plugin-comments', $post_id);
+        switch (sanitize_text_field($_POST['cookie'])) {
+            case 1:
+                $this->set_cookie_value('like-button-for-wordpress-plugin', $post_id);
+                break;
+            case 2:
+                $this->set_cookie_value('like-button-for-wordpress-plugin-comments', $comment_id);
         }
 
         wp_die();
@@ -107,15 +96,16 @@ class Like_Button_For_Wordpress_Model
     public function set_cookie_value($key, $id)
     {
         // Set array of post IDs in the cookie
-        $posts = (string) $_COOKIE[$key] ?? [];
+        $object_ids = $_COOKIE[$key] ?? [];
 
-        if (is_string($posts)) {
-            $posts = unserialize($posts);
+        if (is_string($object_ids)) {
+            $object_ids = unserialize($object_ids);
         }
 
-        $posts[$id] = null;
+        $object_ids[] = (int)$id;
+
         // Cookie set to six months
-        setcookie($key, serialize($posts), time() + 86400 * 180, '/');
+        setcookie($key, htmlspecialchars(serialize($object_ids), ENT_QUOTES), time() + 86400 * 180, '/');
     }
 
     /**
