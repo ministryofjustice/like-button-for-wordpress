@@ -19,7 +19,7 @@ function like_button_run()
      */
     if (!get_comment()) {
         $post_id = get_the_ID();
-        $posts = $_COOKIE[$cookie_key] ?: [];
+        $posts = $_COOKIE[$cookie_key] ?? [];
         $db_like_count = get_post_meta($post_id, $meta_key, true) ?: 0;
 
         // Checks WP database, if post meta doesn't exist add a new entry into the database.
