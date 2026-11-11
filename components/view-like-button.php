@@ -19,7 +19,7 @@ function like_button_run()
      */
     if (!get_comment()) {
         $post_id = get_the_ID();
-        $posts = $_COOKIE[$cookie_key] ?? [];
+        $posts = lbfw_get_liked_ids($cookie_key);
         $db_like_count = get_post_meta($post_id, $meta_key, true) ?: 0;
 
         // Checks WP database, if post meta doesn't exist add a new entry into the database.
@@ -30,13 +30,10 @@ function like_button_run()
             ? $db_like_count . ' person liked this'
             : $db_like_count . ' people liked this');
 
-        // Required to format the cookie's array correctly into the post ID.
-        $posts = (is_string($posts) ? unserialize($posts) : []);
-
         // Check if the post id is in the cookie. If it is then display without button so visitor can't click again.
-        echo in_array($post_id, $posts)
-            ? '<div class="like-button-container"><span aria-label="' . esc_html($like_count_text) . '" class="like-button-count-clicked"><span class="u-icon u-icon--thumbs-o-up"></span>' . ' ' . '<span class="like-button-number">' . esc_html($db_like_count) . '</span>' . '</span></div>'
-            : '<div class="like-button-container"><button aria-label="' . esc_html($like_count_text) . ' - click to like" class="like-button-count" id="post-like-button"><span class="u-icon u-icon--thumbs-o-up"></span>' . ' ' . '<span class="like-button-number">' . esc_html($db_like_count) . '</span>' . '</button></div>';
+        echo in_array((int) $post_id, $posts, true)
+            ? '<div class="like-button-container"><span aria-label="' . esc_attr($like_count_text) . '" class="like-button-count-clicked"><span class="u-icon u-icon--thumbs-o-up"></span>' . ' ' . '<span class="like-button-number">' . esc_html($db_like_count) . '</span>' . '</span></div>'
+            : '<div class="like-button-container"><button aria-label="' . esc_attr($like_count_text) . ' - click to like" class="like-button-count" id="post-like-button"><span class="u-icon u-icon--thumbs-o-up"></span>' . ' ' . '<span class="like-button-number">' . esc_html($db_like_count) . '</span>' . '</button></div>';
     }
 
     /**
@@ -44,7 +41,7 @@ function like_button_run()
      */
     if (get_comment()) {
         $comment_id = get_comment_ID();
-        $comments = $_COOKIE[$cookie_key . '-comments'] ?? [];
+        $comments = lbfw_get_liked_ids($cookie_key . '-comments');
         $comment_count = get_comment_meta($comment_id, $meta_key, true) ?: 0;
 
         // Checks WP database, if comment meta doesn't exist add a new entry into the database.
@@ -55,12 +52,9 @@ function like_button_run()
             ? $comment_count . ' person liked this'
             : $comment_count . ' people liked this');
 
-        // Required to format the cookie's array correctly into the post ID.
-        $comments = (is_string($comments) ? unserialize($comments) : []);
-
         // Check if the comment id is in the cookie. If it is then display without button so visitor can't click again.
-        echo in_array($comment_id, $comments)
-            ? '<div class="comment_vote_off"><span aria-label="' . $comment_count_text . '" class="like-button-comment-count-clicked"><span class="u-icon u-icon--thumbs-o-up"></span>' . ' ' . '<span class="like-button-number">' . $comment_count . '</span>' . '</span></div>'
-            : '<div class="like-button-container-comments" data-comment-like-count=' . $comment_count . ' data-comment-id=' . $comment_id . '><button aria-label="' . $comment_count_text . ' - click to like this comment" class="like-button-comment-count"><span class="u-icon u-icon--thumbs-o-up"></span>' . ' ' . '<span class="like-button-number">' . $comment_count . '</span>' . '</button></div>';
+        echo in_array((int) $comment_id, $comments, true)
+            ? '<div class="comment_vote_off"><span aria-label="' . esc_attr($comment_count_text) . '" class="like-button-comment-count-clicked"><span class="u-icon u-icon--thumbs-o-up"></span>' . ' ' . '<span class="like-button-number">' . esc_html($comment_count) . '</span>' . '</span></div>'
+            : '<div class="like-button-container-comments" data-comment-like-count="' . esc_attr($comment_count) . '" data-comment-id="' . esc_attr($comment_id) . '"><button aria-label="' . esc_attr($comment_count_text) . ' - click to like this comment" class="like-button-comment-count"><span class="u-icon u-icon--thumbs-o-up"></span>' . ' ' . '<span class="like-button-number">' . esc_html($comment_count) . '</span>' . '</button></div>';
     }
 }

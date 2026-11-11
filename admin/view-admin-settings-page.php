@@ -36,7 +36,7 @@ $plugin_version = $this->version;
       <li>Plugin Name: Like Button For Wordpress</li>
       <li>Plugin URI: <a href="https://github.com/ministryofjustice/like-button-for-wordpress"> https://github.com/ministryofjustice/like-button-for-wordpress</a></li>
       <li>Description: Adds 'like' button functionality to your WP site.</li>
-      <li><?php echo "Version: " . $plugin_version; ?></li>
+      <li><?php echo "Version: " . esc_html($plugin_version); ?></li>
       <li>Text Domain: like-button-for-wordpress</li>
       <li>Domain Path: /languages</li>
       <li>Author: A Brown</li>

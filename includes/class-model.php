@@ -18,6 +18,41 @@ if (!defined('ABSPATH')) {
     die();
 }
 
+/**
+ * Returns the liked IDs stored in a like-button cookie, as a list of unique positive integers.
+ *
+ * The cookie holds a JSON list of IDs, e.g. [12,45]. It is visitor-controlled, so it is
+ * decoded with json_decode (which never instantiates PHP objects) and anything that is not
+ * a positive integer ID is discarded. A missing or malformed cookie yields [].
+ *
+ * @param string $cookie_name The name of the cookie to read.
+ * @return int[] Liked IDs.
+ */
+function lbfw_get_liked_ids($cookie_name)
+{
+    if (!isset($_COOKIE[$cookie_name]) || !is_string($_COOKIE[$cookie_name])) {
+        return [];
+    }
+
+    // WordPress adds slashes to $_COOKIE.
+    $raw = wp_unslash($_COOKIE[$cookie_name]);
+
+    if ('' === $raw || strlen($raw) > 4096) {
+        return [];
+    }
+
+    // Limit nesting; any non-integer entries are discarded below.
+    $data = json_decode($raw, true, 2);
+
+    if (!is_array($data)) {
+        return [];
+    }
+
+    $ids = array_filter($data, fn($id) => is_int($id) && $id > 0);
+
+    return array_values(array_unique($ids));
+}
+
 class Like_Button_For_Wordpress_Model
 {
 
@@ -71,18 +106,32 @@ class Like_Button_For_Wordpress_Model
     {
         check_ajax_referer('like_button_nonce', 'security');
 
-        // Values returned from AJAX (like-button-for-wordpress.js)
-        $post_id = sanitize_text_field($_POST['postID'] ?? null);
-        $like_count_value = sanitize_text_field($_POST['likeCountValue'] ?? null);
-        $comment_id = sanitize_text_field($_POST['commentID'] ?? null);
-        $like_comment_count_value = sanitize_text_field($_POST['likeCommentCountValue'] ?? null);
+        // Values returned from AJAX (like-button-for-wordpress.js).
+        // IDs must be positive integers and like counts must be integers. A field may be absent
+        // (a post like sends no comment fields and vice versa), but a non-integer value is rejected.
+        $post_id = $this->get_int_from_post('postID', 1);
+        $like_count_value = $this->get_int_from_post('likeCountValue');
+        $comment_id = $this->get_int_from_post('commentID', 1);
+        $like_comment_count_value = $this->get_int_from_post('likeCommentCountValue');
+
+        // Which cookie to set: 1 = post like, 2 = comment like. Absent means no cookie is set.
+        $cookie_validation = $this->get_int_from_post('cookie');
+
+        if (false === $post_id || false === $like_count_value || false === $comment_id || false === $like_comment_count_value || false === $cookie_validation) {
+            wp_send_json_error(['message' => 'Invalid input: IDs, like counts and cookie must be integers.'], 400);
+        }
 
         // Update the database
-        update_post_meta($post_id, 'lbfw_likes', $like_count_value);
-        update_comment_meta($comment_id, 'lbfw_likes', $like_comment_count_value);
+        if (null !== $post_id && null !== $like_count_value) {
+            update_post_meta($post_id, 'lbfw_likes', $like_count_value);
+        }
+
+        if (null !== $comment_id && null !== $like_comment_count_value) {
+            update_comment_meta($comment_id, 'lbfw_likes', $like_comment_count_value);
+        }
 
         // Validates that there has been a like button click
-        switch (sanitize_text_field($_POST['cookie'])) {
+        switch ($cookie_validation) {
             case 1:
                 $this->set_cookie_value('like-button-for-wordpress-plugin', $post_id);
                 break;
@@ -95,17 +144,43 @@ class Like_Button_For_Wordpress_Model
 
     public function set_cookie_value($key, $id)
     {
-        // Set array of post IDs in the cookie
-        $object_ids = $_COOKIE[$key] ?? [];
-
-        if (is_string($object_ids)) {
-            $object_ids = unserialize($object_ids);
+        // No valid ID was sent, so there is nothing to record.
+        if (!$id) {
+            return;
         }
 
-        $object_ids[] = (int)$id;
+        // Set array of post IDs in the cookie
+        $object_ids = lbfw_get_liked_ids($key);
+
+        if (!in_array((int) $id, $object_ids, true)) {
+            $object_ids[] = (int) $id;
+        }
 
         // Cookie set to six months
-        setcookie($key, htmlspecialchars(serialize($object_ids), ENT_QUOTES), time() + 86400 * 180, '/');
+        setcookie($key, wp_json_encode($object_ids), time() + 86400 * 180, '/');
+    }
+
+    /**
+     * Reads an integer value from $_POST.
+     *
+     * @param string   $key The $_POST key to read.
+     * @param int|null $min Optional minimum allowed value.
+     * @return int|null|false The integer when valid, null when the key is absent or empty,
+     *                        or false when a value is present but is not a valid integer.
+     */
+    private function get_int_from_post($key, $min = null)
+    {
+        if (!isset($_POST[$key]) || '' === $_POST[$key]) {
+            return null;
+        }
+
+        if (!is_scalar($_POST[$key])) {
+            return false;
+        }
+
+        $options = (null === $min) ? [] : ['options' => ['min_range' => $min]];
+
+        return filter_var(wp_unslash($_POST[$key]), FILTER_VALIDATE_INT, $options);
     }
 
     /**

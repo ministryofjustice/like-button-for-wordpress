@@ -13,6 +13,7 @@
  * Plugin URI:        http://wordpress.org/extend/plugins/
  * Description:       Adds a Like Button to your Wordpress site.
  * Version:           1.0.0
+ * Requires PHP:      7.4
  * Text Domain:       like-button-for-wordpress
  * Domain Path:       /languages
  * Author:            A Brown
